@@ -1,0 +1,13 @@
+# Built files
+build/
+*.so
+*.o
+*.obj
+*.objdump
+*.exe
+*.bin
+*.com
+*.out
+
+# Media binary files
+*.png

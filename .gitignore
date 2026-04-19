@@ -1,0 +1,6 @@
+# For PDF generated from README file
+*.pdf
+
+# IDE related
+.vscode/
+.settings/
