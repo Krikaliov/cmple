@@ -1,6 +1,12 @@
 #ifndef CMPLE_H
 #define CMPLE_H
 
+/**
+ * TODO:
+ * - TEST_ERROR
+ * - LE/LT/GE/GT tests for numerals, arrays and strings
+ */
+
 #ifdef __cplusplus
 #include <cstdio>
 #include <cstring>
@@ -57,8 +63,12 @@ int main(int argc, char** argv) { \
 
 #define ON_TEST_SUITE_END \
   fprintf(stdout, "[%s] Test suite finished.\n", test_suite.name); \
-  fprintf(stdout, "[%s] >>> Passed test cases: %d/%d (%.1f%%)\n", test_suite.name, TEST_VAR_PASSED_CASES, TEST_VAR_CASE_COUNT, 100.f * (((float)TEST_VAR_PASSED_CASES) / ((float)TEST_VAR_CASE_COUNT))); \
-  fprintf(stdout, "[%s] >>> Failed test cases: %d/%d (%.1f%%)\n", test_suite.name, TEST_VAR_FAILED_CASE_COUNT, TEST_VAR_CASE_COUNT, 100.f * (((float)TEST_VAR_FAILED_CASE_COUNT) / ((float)TEST_VAR_CASE_COUNT))); \
+  fprintf(stdout, "[%s] >>> Passed test cases: %d/%d (%.1f%%)\n", \
+    test_suite.name, TEST_VAR_PASSED_CASES, TEST_VAR_CASE_COUNT, \
+    100.f * (((float)TEST_VAR_PASSED_CASES) / ((float)TEST_VAR_CASE_COUNT))); \
+  fprintf(stdout, "[%s] >>> Failed test cases: %d/%d (%.1f%%)\n", \
+    test_suite.name, TEST_VAR_FAILED_CASE_COUNT, TEST_VAR_CASE_COUNT, \
+    100.f * (((float)TEST_VAR_FAILED_CASE_COUNT) / ((float)TEST_VAR_CASE_COUNT))); \
   fprintf(stdout, "[%s] >>> Total failure count: %d\n\n", test_suite.name, test_suite.failed_test_count)
 
 #define TEST_SUITE_END \
@@ -85,7 +95,7 @@ test_suite.failed_test_count += current_case->failed_tests; \
 TEST_VAR_FAILED_CASE_COUNT += min(1, current_case->failed_tests); \
 ON_TEST_CASE_END;
 
-#define ON_TEST_FILE_LINE_FAILURE \
+#define ON_TEST_FAILURE_FILE_LINE \
   fprintf(stdout, "[%s]<%s> (TEST FAILED!) %s:%d\n", test_suite.name, current_case->name, __FILE__, __LINE__)
 
 #define ON_TEST_EXPR_FAILURE(expr) \
@@ -95,7 +105,7 @@ ON_TEST_CASE_END;
 if (!(expr)) \
 { \
   current_case->failed_tests++; \
-  ON_TEST_FILE_LINE_FAILURE; \
+  ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_EXPR_FAILURE(expr); \
 }
 
@@ -108,19 +118,45 @@ if (!(expr)) \
 if (!((a) == (b))) \
 { \
   current_case->failed_tests++; \
-  ON_TEST_FILE_LINE_FAILURE; \
+  ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_EQ_FAILURE(a,b); \
 }
 
-#define ON_TEST_STRUCT_EQ_FAILURE(u,v) \
-  fprintf(stdout, "[%s]<%s> (TEST FAILED!) Expected structures " #u " and " #v " to be equal but actually not!\n\n", test_suite.name, current_case->name)
+#define ON_TEST_NE_FAILURE(a,b) \
+  fprintf(stdout, "[%s]<%s> (TEST FAILED!) Expected " #a " and " #b " to differ but actually not!\n", test_suite.name, current_case->name); \
+  fprintf(stdout, "[%s]<%s> (TEST FAILED!) >>> " #a " evaluates to %d\n", test_suite.name, current_case->name, a); \
+  fprintf(stdout, "[%s]<%s> (TEST FAILED!) >>> " #b " evaluates to %d\n\n", test_suite.name, current_case->name, b)
 
-#define TEST_STRUCT_EQ(u,v) \
-if (sizeof(u) != sizeof(v) || memcmp((void*) (&(u)), (void*) (&(v)), sizeof(u))) \
+#define TEST_NE(a,b) \
+if ((a) == (b)) \
 { \
   current_case->failed_tests++; \
-  ON_TEST_FILE_LINE_FAILURE; \
+  ON_TEST_FAILURE_FILE_LINE; \
+  ON_TEST_NE_FAILURE(a,b); \
+}
+
+#define ON_TEST_STRUCT_EQ_FAILURE(u,v) \
+  fprintf(stdout, "[%s]<%s> (TEST FAILED!) Expected structures " #u " and " #v " to be equal but actually not!\n\n", \
+    test_suite.name, current_case->name)
+
+#define TEST_STRUCT_EQ(u,v) \
+if (sizeof(u) != sizeof(v) || memcmp((void*) &(u), (void*) &(v), sizeof(u))) \
+{ \
+  current_case->failed_tests++; \
+  ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_STRUCT_EQ_FAILURE(u,v); \
+}
+
+#define ON_TEST_STRUCT_NE_FAILURE(u,v) \
+  fprintf(stdout, "[%s]<%s> (TEST FAILED!) Expected structures " #u " and " #v " to differ but actually not!\n\n", \
+    test_suite.name, current_case->name)
+
+#define TEST_STRUCT_NE(u,v) \
+if (sizeof(u) == sizeof(v) && !memcmp((void*) &(u), (void*) &(v), sizeof(u))) \
+{ \
+  current_case->failed_tests++; \
+  ON_TEST_FAILURE_FILE_LINE; \
+  ON_TEST_STRUCT_NE_FAILURE(u,v); \
 }
 
 #define ON_TEST_STR_EQ_FAILURE(x,y) \
@@ -132,8 +168,21 @@ if (sizeof(u) != sizeof(v) || memcmp((void*) (&(u)), (void*) (&(v)), sizeof(u)))
 if (strlen(x) != strlen(y) || strcmp((x), (y))) \
 { \
   current_case->failed_tests++; \
-  ON_TEST_FILE_LINE_FAILURE; \
+  ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_STR_EQ_FAILURE(x,y); \
+}
+
+#define ON_TEST_STR_NE_FAILURE(x,y) \
+  fprintf(stdout, "[%s]<%s> (TEST FAILED!) Expected strings to differ but actually not:\n", test_suite.name, current_case->name); \
+  fprintf(stdout, "[%s]<%s> (TEST_FAILED!) >>> %s\n" , test_suite.name, current_case->name, x); \
+  fprintf(stdout, "[%s]<%s> (TEST_FAILED!) >>> %s\n\n" , test_suite.name, current_case->name, y)
+
+#define TEST_STR_NE(x,y) \
+if (strlen(x) == strlen(y) && !strcmp((x), (y))) \
+{ \
+  current_case->failed_tests++; \
+  ON_TEST_FAILURE_FILE_LINE; \
+  ON_TEST_STR_NE_FAILURE(x,y); \
 }
 
 #define ON_TEST_ARRAY_EQ_FAILURE(x,y,n) \
@@ -141,11 +190,23 @@ if (strlen(x) != strlen(y) || strcmp((x), (y))) \
     test_suite.name, current_case->name, n)
 
 #define TEST_ARRAY_EQ(x,y,n) \
-if (memcmp((void*) (&(x)), (void*) (&(y)), n)) \
+if (memcmp((x), (y), n)) \
 { \
   current_case->failed_tests++; \
-  ON_TEST_FILE_LINE_FAILURE; \
+  ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_ARRAY_EQ_FAILURE(x,y,n); \
+}
+
+#define ON_TEST_ARRAY_NE_FAILURE(x,y,n) \
+  fprintf(stdout, "[%s]<%s> (TEST FAILED!) Expected arrays " #x " and " #y " of size %llu to differ but actually not!\n\n", \
+    test_suite.name, current_case->name, n)
+
+#define TEST_ARRAY_NE(x,y,n) \
+if (!memcmp((x), (y), n)) \
+{ \
+  current_case->failed_tests++; \
+  ON_TEST_FAILURE_FILE_LINE; \
+  ON_TEST_ARRAY_NE_FAILURE(x,y,n); \
 }
 
 #ifdef __cpluscplus

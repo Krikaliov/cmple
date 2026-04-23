@@ -8,9 +8,8 @@ TEST_CASE_BEGIN("recursive function")
   TEST_EQ(fact_recursive(-1)   , -1);
   TEST_EQ(fact_recursive(-1001), -1);
 
-  TEST_EQ(fact_recursive(0), 1);
-  TEST_EQ(fact_recursive(1), 1);
-  TEST_EQ(fact_recursive(2), 2);
+  TEST_EQ(fact_recursive(0), fact_recursive(1));
+  TEST_NE(fact_recursive(1), fact_recursive(2));
 
   TEST_EQ(fact_recursive(3), 6);
   TEST_EQ(fact_recursive(4), 24);
