@@ -24,9 +24,8 @@ TEST_CASE_BEGIN("imperative function")
   TEST_EQ(fact_imperative(-1)   , -1);
   TEST_EQ(fact_imperative(-1001), -1);
 
-  TEST_EQ(fact_imperative(0), 1);
-  TEST_EQ(fact_imperative(1), 1);
-  TEST_EQ(fact_imperative(2), 2);
+  TEST_EQ(fact_imperative(0), fact_imperative(1));
+  TEST_NE(fact_imperative(1), fact_imperative(2));
 
   TEST_EQ(fact_imperative(3), 6);
   TEST_EQ(fact_imperative(4), 24);

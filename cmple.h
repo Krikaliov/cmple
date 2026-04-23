@@ -5,6 +5,10 @@
  * TODO:
  * - TEST_ERROR
  * - LE/LT/GE/GT tests for numerals, arrays and strings
+ * - Web site for the documentation
+ * - CI/CD process via Github Actions
+ * THEN:
+ * --> Launch first release
  */
 
 #ifdef __cplusplus
