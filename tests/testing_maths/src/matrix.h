@@ -5,6 +5,17 @@
 extern "C" {
 #endif
 
+extern unsigned char matrix_errno;
+
+/**
+ * Pop last error code for matrix calculus.
+ * @return the last error code or 0 if no error were encountered.
+ * @note This function set the last error code to 0 after returning it
+ * so two consecutive calls of `pop_matrix_last_errno` would not return
+ * the same value!
+ */
+unsigned char pop_matrix_last_errno();
+
 /**
  * 2x2 float matrix struct such that
 ```
@@ -16,6 +27,22 @@ struct matrix
 {
   float a, b, c, d;
 };
+
+/**
+ * Compute A+B and return the result
+ * @param a matrix A
+ * @param b matrix B
+ * @return matrix A+B
+ */
+struct matrix matrix_add(const struct matrix a, const struct matrix b);
+
+/**
+ * Compute A*B and return the result
+ * @param a matrix A
+ * @param b matrix B
+ * @return matrix A*B
+ */
+struct matrix matrix_mul(const struct matrix a, const struct matrix b);
 
 /**
  * Trace of a matrix

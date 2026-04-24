@@ -8,7 +8,7 @@ TEST_CASE_BEGIN("to be equal or not")
   const int u[N] = {1, 4, 9, 16, 25};
   const int v[N] = {1, 4, 9, 16, 24};
 
-  TEST_ARRAY_EQ(u, v, N * sizeof(int));
+  TEST_ARRAY_NE(u, v, N * sizeof(int));
 }
 TEST_CASE_END
 

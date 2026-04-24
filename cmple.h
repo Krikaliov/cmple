@@ -3,33 +3,63 @@
 
 /**
  * TODO:
- * - TEST_ERROR
  * - LE/LT/GE/GT tests for numerals, arrays and strings
  * - Web site for the documentation
  * - CI/CD process via Github Actions
+ * - Complete README.md
  * THEN:
  * --> Launch first release
  */
-
-#ifdef __cplusplus
-#include <cstdio>
-#include <cstring>
-#else
-#include <stdio.h>
-#include <string.h>
-#endif
 
 #ifdef __cpluscplus
 extern "C" {
 #endif
 
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
+#define RAW_PASTE(x,y) x##y
+#define PASTE(x,y) RAW_PASTE(x,y)
+
 #define max(a,b) ((a) > (b) ? (a) : (b))
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
+#ifndef CMPLE_SIZE_T
+#define CMPLE_SIZE_T unsigned long
+#endif
+
+#ifndef CMPLE_INLINE
+#define CMPLE_INLINE
+#endif
+
+CMPLE_INLINE int _cmple_memcmp(const void* u, const void* v, CMPLE_SIZE_T n)
+{
+  CMPLE_SIZE_T i = 0;
+  const unsigned char* pu = (const unsigned char*) u;
+  const unsigned char* pv = (const unsigned char*) v;
+  while (n - i && (pu[i] == pv[i])) i++;
+  return n - i ? (int)(pu[i] - pv[i]) : 0;
+}
+#define CMPLE_MEMCMP(u,v,n) _cmple_memcmp(u,v,n)
+
+CMPLE_INLINE CMPLE_SIZE_T _cmple_strlen(const char* x)
+{
+  const char* start = x;
+  while (*x) x++;
+  return (CMPLE_SIZE_T)(x - start);
+}
+#define CMPLE_STRLEN(x) _cmple_strlen(x)
+
+CMPLE_INLINE int _cmple_strcmp(const char* x, const char* y)
+{
+  while (*x && (*x == *y)) { x++; y++; };
+  return (int)(*(unsigned char*)x - *(unsigned char*)y);
+}
+#define CMPLE_STRCMP(x,y) _cmple_strcmp(x,y)
+
 #define TEST_NAME_LENGTH 256
 
-#define PRIVATE_PASTE(x,y) x##y
-#define PASTE(x,y) PRIVATE_PASTE(x,y)
 #define NEW_TEST_CASE_NAME PASTE(test_case, __LINE__)
 
 #define TEST_VAR_PASSED_CASES test_suite.test_case_count - test_suite.failed_test_case_count
@@ -144,7 +174,7 @@ if ((a) == (b)) \
     test_suite.name, current_case->name)
 
 #define TEST_STRUCT_EQ(u,v) \
-if (sizeof(u) != sizeof(v) || memcmp((void*) &(u), (void*) &(v), sizeof(u))) \
+if (sizeof(u) != sizeof(v) || CMPLE_MEMCMP((void*) &(u), (void*) &(v), sizeof(u))) \
 { \
   current_case->failed_tests++; \
   ON_TEST_FAILURE_FILE_LINE; \
@@ -156,7 +186,7 @@ if (sizeof(u) != sizeof(v) || memcmp((void*) &(u), (void*) &(v), sizeof(u))) \
     test_suite.name, current_case->name)
 
 #define TEST_STRUCT_NE(u,v) \
-if (sizeof(u) == sizeof(v) && !memcmp((void*) &(u), (void*) &(v), sizeof(u))) \
+if (sizeof(u) == sizeof(v) && !CMPLE_MEMCMP((void*) &(u), (void*) &(v), sizeof(u))) \
 { \
   current_case->failed_tests++; \
   ON_TEST_FAILURE_FILE_LINE; \
@@ -169,7 +199,7 @@ if (sizeof(u) == sizeof(v) && !memcmp((void*) &(u), (void*) &(v), sizeof(u))) \
   fprintf(stdout, "[%s]<%s> (TEST_FAILED!) >>> %s\n\n" , test_suite.name, current_case->name, y)
 
 #define TEST_STR_EQ(x,y) \
-if (strlen(x) != strlen(y) || strcmp((x), (y))) \
+if (CMPLE_STRLEN(x) != CMPLE_STRLEN(y) || CMPLE_STRCMP((x), (y))) \
 { \
   current_case->failed_tests++; \
   ON_TEST_FAILURE_FILE_LINE; \
@@ -182,7 +212,7 @@ if (strlen(x) != strlen(y) || strcmp((x), (y))) \
   fprintf(stdout, "[%s]<%s> (TEST_FAILED!) >>> %s\n\n" , test_suite.name, current_case->name, y)
 
 #define TEST_STR_NE(x,y) \
-if (strlen(x) == strlen(y) && !strcmp((x), (y))) \
+if (CMPLE_STRLEN(x) == CMPLE_STRLEN(y) && !CMPLE_STRCMP((x), (y))) \
 { \
   current_case->failed_tests++; \
   ON_TEST_FAILURE_FILE_LINE; \
@@ -194,7 +224,7 @@ if (strlen(x) == strlen(y) && !strcmp((x), (y))) \
     test_suite.name, current_case->name, n)
 
 #define TEST_ARRAY_EQ(x,y,n) \
-if (memcmp((x), (y), n)) \
+if (CMPLE_MEMCMP((x), (y), n)) \
 { \
   current_case->failed_tests++; \
   ON_TEST_FAILURE_FILE_LINE; \
@@ -206,7 +236,7 @@ if (memcmp((x), (y), n)) \
     test_suite.name, current_case->name, n)
 
 #define TEST_ARRAY_NE(x,y,n) \
-if (!memcmp((x), (y), n)) \
+if (!CMPLE_MEMCMP((x), (y), n)) \
 { \
   current_case->failed_tests++; \
   ON_TEST_FAILURE_FILE_LINE; \

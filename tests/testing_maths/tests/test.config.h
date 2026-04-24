@@ -1,6 +1,11 @@
 #ifndef TEST_CONFIG_H
 #define TEST_CONFIG_H
 
+#include <stdio.h>
+#include <string.h>
+
+#define CMPLE_SIZE_T size_t
+
 #include "cmple.h"
 
 #undef ON_TEST_CASE_BEGIN
