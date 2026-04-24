@@ -1,3 +1,3 @@
 <p align="center"><img src="title.png"></p>
 
-**cmple** is a new simple C testing framework working with [**CMake**](https://cmake.org/cmake/help/latest/).
+**cmple** is a new simple C testing framework, the lightest, the fastest, the most widely portable, the one you need right now!
