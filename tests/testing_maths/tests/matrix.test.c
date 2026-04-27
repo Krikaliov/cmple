@@ -9,8 +9,8 @@ TEST_CASE_BEGIN("to be equal or not")
   const struct matrix b = {1, 1, 0, 1};
   const struct matrix c = {1, 1, 1, 0};
 
-  TEST_STRUCT_NE(a, b);
-  TEST_STRUCT_EQ(a, c);
+  TEST_EXPR(!matrix_eq(a, b));
+  TEST_EXPR(matrix_eq(a, c));
 }
 TEST_CASE_END
 
@@ -31,11 +31,11 @@ TEST_CASE_BEGIN("determinant and inverse")
   TEST_NE(pop_matrix_last_errno(), 0);
   TEST_EQ(pop_matrix_last_errno(), 0);
 
-  TEST_STRUCT_EQ(u_inv, zero);
+  TEST_EXPR(matrix_eq(u_inv, zero));
 
   const struct matrix v_v_inv = matrix_mul(v, v_inv);
 
-  TEST_STRUCT_EQ(v_v_inv, id_2);
+  TEST_EXPR(matrix_eq(v_v_inv, id_2));
 }
 TEST_CASE_END
 

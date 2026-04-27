@@ -29,6 +29,14 @@ struct matrix
 };
 
 /**
+ * Check whether matrix A and B are equal or not
+ * @param a matrix A
+ * @param b matrix B
+ * @return 1 if A=B, 0 otherwise.
+ */
+int matrix_eq(const struct matrix a, const struct matrix b);
+
+/**
  * Compute A+B and return the result
  * @param a matrix A
  * @param b matrix B

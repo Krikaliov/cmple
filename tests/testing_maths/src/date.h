@@ -21,10 +21,6 @@ extern "C" {
  */
 int format_date(char* str_dest, int years, int months, int days, int hours, int minutes, int seconds, int ms);
 
-#define STRINGFY_DATE(var, years, months, days, hours, minutes, seconds, ms) \
-char var [DATE_MAXLENGTH] = "0"; \
-format_date(var, years, months, days, hours, minutes, seconds, ms)
-
 #ifdef __cplusplus
 }
 #endif

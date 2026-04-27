@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 #include "matrix.h"
 
 unsigned char matrix_errno = 0;
@@ -11,6 +9,11 @@ unsigned char pop_matrix_last_errno()
   const unsigned char last_errno = matrix_errno;
   matrix_errno = 0;
   return last_errno;
+}
+
+int matrix_eq(const struct matrix a, const struct matrix b)
+{
+  return (a.a == b.a && a.b == b.b && a.c == b.c && a.d == b.d);
 }
 
 struct matrix matrix_add(const struct matrix a, const struct matrix b)

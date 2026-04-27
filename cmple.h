@@ -8,6 +8,10 @@
  */
 
 /**
+ * URGENT:
+ * - Type resolution issue
+ * - Create new testing project for libc dependant platforms
+ * - Test it
  * TODO:
  * - CI/CD process via Github Actions
  * - Complete README.md
@@ -190,9 +194,13 @@ int main(int argc, char** argv) { \
   fprintf(stdout, "[%s] >>> Total failure count: %d\n\n", test_suite.name, test_suite.failed_test_count)
 #endif
 
+#ifndef TEST_SUITE_VALUE_RETURNED
+#define TEST_SUITE_VALUE_RETURNED TEST_VAR_TOTAL_FAILURE_COUNT
+#endif
+
 #define TEST_SUITE_END \
   ON_TEST_SUITE_END; \
-  return 0; \
+  return TEST_SUITE_VALUE_RETURNED ; \
 }
 
 #ifndef ON_TEST_CASE_BEGIN
@@ -324,34 +332,6 @@ if ((a) <= (b)) \
   current_case->failed_tests++; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_GT_FAILURE(a,b); \
-}
-
-#ifndef ON_TEST_STRUCT_EQ_FAILURE
-#define ON_TEST_STRUCT_EQ_FAILURE(u,v) \
-  fprintf(stdout, "[%s]<%s> Expected structures " #u " and " #v " to be equal but actually not!\n\n", \
-    test_suite.name, current_case->name)
-#endif
-
-#define TEST_STRUCT_EQ(u,v) \
-if (sizeof(u) != sizeof(v) || CMPLE_MEMCMP((void*) &(u), (void*) &(v), sizeof(u))) \
-{ \
-  current_case->failed_tests++; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_STRUCT_EQ_FAILURE(u,v); \
-}
-
-#ifndef ON_TEST_STRUCT_NE_FAILURE
-#define ON_TEST_STRUCT_NE_FAILURE(u,v) \
-  fprintf(stdout, "[%s]<%s> Expected structures " #u " and " #v " to differ but actually not!\n\n", \
-    test_suite.name, current_case->name)
-#endif
-
-#define TEST_STRUCT_NE(u,v) \
-if (sizeof(u) == sizeof(v) && !CMPLE_MEMCMP((void*) &(u), (void*) &(v), sizeof(u))) \
-{ \
-  current_case->failed_tests++; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_STRUCT_NE_FAILURE(u,v); \
 }
 
 #ifndef ON_TEST_STR_EQ_FAILURE
