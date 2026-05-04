@@ -1,16 +1,32 @@
 #ifndef TEST_CONFIG_H
 #define TEST_CONFIG_H
 
-#include <stdio.h>
-#include <string.h>
+#define ON_TEST_SUITE_BEGIN
+#define ON_TEST_SUITE_END
 
-#define CMPLE_SIZE_T size_t
+#define ON_TEST_CASE_BEGIN
+#define ON_TEST_CASE_END
 
-#define TEST_SUITE_VALUE_RETURNED 0
+#define ON_TEST_FAILURE_FILE_LINE
 
-#define ON_TEST_CASE_BEGIN \
-fprintf(stdout, "[%s]<%s> Starting test case with currently %d failed cases before\n", \
-  TEST_VAR_SUITE_NAME, TEST_VAR_CURRENT_CASE_NAME, TEST_VAR_FAILED_CASE_COUNT)
+#define ON_TEST_EXPR_FAILURE(expr)
+
+#define ON_TEST_EQ_FAILURE(a,b,t)
+#define ON_TEST_NE_FAILURE(a,b,t)
+#define ON_TEST_LE_FAILURE(a,b,t)
+#define ON_TEST_LT_FAILURE(a,b,t)
+#define ON_TEST_GE_FAILURE(a,b,t)
+#define ON_TEST_GT_FAILURE(a,b,t)
+
+#define ON_TEST_STR_EQ_FAILURE(x,y)
+#define ON_TEST_STR_NE_FAILURE(x,y)
+#define ON_TEST_STR_LE_FAILURE(x,y)
+#define ON_TEST_STR_LT_FAILURE(x,y)
+#define ON_TEST_STR_GE_FAILURE(x,y)
+#define ON_TEST_STR_GT_FAILURE(x,y)
+
+#define ON_TEST_ARRAY_EQ_FAILURE(x,y,n)
+#define ON_TEST_ARRAY_NE_FAILURE(x,y,n)
 
 #include "cmple.h"
 

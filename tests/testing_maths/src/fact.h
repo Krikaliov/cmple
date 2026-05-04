@@ -9,7 +9,7 @@ extern "C" {
  * Compute the factorial number of any positive integer
  * in the recursive way.
  * @param n positive integer
- * @return n! or -1 if the given integer n is negative
+ * @return n! or -1 if the given integer n is negative (<0)
  */
 int fact_recursive(const int n);
 
@@ -17,7 +17,7 @@ int fact_recursive(const int n);
  * Compute the factorial number of any positive integer
  * in the imperative way.
  * @param n positive integer
- * @return n! or -1 if the given integer n is negative
+ * @return n! or -1 if the given integer n is negative (<0)
  */
 int fact_imperative(const int n);
 

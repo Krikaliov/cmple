@@ -22,14 +22,14 @@ TEST_CASE_BEGIN("determinant and inverse")
   const struct matrix u = {4, 8, -3, -6};
   const struct matrix v = {4, -8, 3, 6};
 
-  TEST_EQ(matrix_det(u), 0);
-  TEST_EQ(matrix_det(v), 48);
+  TEST_EQ(matrix_det(u), 0.f, CMPLE_FLOAT32);
+  TEST_EQ(matrix_det(v), 48.f, CMPLE_FLOAT32);
 
   const struct matrix u_inv = matrix_inverse(u);
   const struct matrix v_inv = matrix_inverse(v);
 
-  TEST_NE(pop_matrix_last_errno(), 0);
-  TEST_EQ(pop_matrix_last_errno(), 0);
+  TEST_NE(pop_matrix_last_errno(), 0, CMPLE_UINT8);
+  TEST_EQ(pop_matrix_last_errno(), 0, CMPLE_UINT8);
 
   TEST_EXPR(matrix_eq(u_inv, zero));
 
