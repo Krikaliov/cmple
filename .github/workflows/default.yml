@@ -67,7 +67,7 @@ jobs:
 
     - name: Cleanup CMake for testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
-      run: rm -Rf build
+      run: rm --recursive --force build
     
     - name: Configure CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
@@ -83,4 +83,4 @@ jobs:
 
     - name: Cleanup CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
-      run: rm -Rf build
+      run: rm --recursive --force build
