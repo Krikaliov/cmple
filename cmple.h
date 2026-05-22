@@ -8,9 +8,6 @@
  */
 
 /**
- * URGENT:
- * - Make "testing maths" buildable without stdlib
- * - Test it
  * TODO:
  * - CI/CD process via Github Actions
  * - Complete README.md
