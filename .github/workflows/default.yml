@@ -65,10 +65,6 @@ jobs:
       working-directory: ${{ steps.strings.outputs.tests }}maths
       run: cmake --build build --target run_tests && echo $?
 
-    - name: Cleanup CMake for testing maths
-      working-directory: ${{ steps.strings.outputs.tests }}maths
-      run: rm --recursive --force build
-    
     - name: Configure CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
       run: >
@@ -81,6 +77,3 @@ jobs:
       working-directory: ${{ steps.strings.outputs.tests }}strings
       run: cmake --build build --target run_tests
 
-    - name: Cleanup CMake for testing strings
-      working-directory: ${{ steps.strings.outputs.tests }}strings
-      run: rm --recursive --force build
