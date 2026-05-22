@@ -244,8 +244,9 @@ CMPLE_INLINE int _cmple_strcmp(const char* x, const char* y)
 struct test_case_status
 {
   const char name[TEST_NAME_LENGTH];
-  unsigned int failed_tests;
   struct test_case_status* next_case;
+  unsigned int failed_tests;
+  unsigned int default_padding;
 };
 
 struct test_suite_status
@@ -255,6 +256,7 @@ struct test_suite_status
   unsigned int test_case_count;
   unsigned int failed_test_case_count;
   unsigned int failed_test_count;
+  unsigned int default_padding;
 };
 
 /*************************/
