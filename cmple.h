@@ -327,7 +327,7 @@ struct test_suite_status
 
 #define TEST_SUITE_BEGIN(name) \
 int main(int argc, char** argv) { \
-  struct test_suite_status test_suite = (struct test_suite_status) { name, NULL, 0, 0, 0 }; \
+  struct test_suite_status test_suite = (struct test_suite_status) { name, NULL, 0, 0, 0, 0 }; \
   struct test_case_status* current_case = NULL; \
   ON_TEST_SUITE_BEGIN;
 
@@ -359,7 +359,7 @@ fprintf(stdout, "[%s]<%s> Starting test case...\n", test_suite.name, current_cas
 
 #define TEST_CASE_BEGIN(name) \
 TEST_VAR_CASE_COUNT++; \
-struct test_case_status TEST_NEW_CASE_VARNAME = (struct test_case_status) { name, 0, NULL }; \
+struct test_case_status TEST_NEW_CASE_VARNAME = (struct test_case_status) { name, NULL, 0, 0 }; \
 if (current_case == NULL) test_suite.first_case = & TEST_NEW_CASE_VARNAME ; \
 else current_case->next_case = & TEST_NEW_CASE_VARNAME ; \
 current_case = & TEST_NEW_CASE_VARNAME ; \
