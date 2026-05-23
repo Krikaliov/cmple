@@ -3,8 +3,7 @@
 int fact_recursive(const int n)
 {
   if (n < 0) return -1;
-  if (n < 1) return 1;
-  if (n < 3) return n;
+  if (n < 2) return 1;
 
   return n * fact_recursive(n-1);
 }

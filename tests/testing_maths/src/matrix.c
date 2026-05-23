@@ -4,7 +4,7 @@ unsigned char matrix_errno = 0;
 
 static inline void set_matrix_errno(unsigned char n) { matrix_errno = n; }
 
-unsigned char pop_matrix_last_errno()
+unsigned char pop_matrix_last_errno(void)
 {
   const unsigned char last_errno = matrix_errno;
   matrix_errno = 0;
@@ -56,12 +56,12 @@ struct matrix matrix_inverse(const struct matrix mat)
   }
 }
 
-struct matrix matrix_id()
+struct matrix matrix_id(void)
 {
   return (struct matrix) {1, 0, 0, 1};
 }
 
-struct matrix matrix_zero()
+struct matrix matrix_zero(void)
 {
   return (struct matrix) {0, 0, 0, 0};
 }

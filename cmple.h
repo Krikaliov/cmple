@@ -244,8 +244,9 @@ CMPLE_INLINE int _cmple_strcmp(const char* x, const char* y)
 struct test_case_status
 {
   const char name[TEST_NAME_LENGTH];
-  unsigned int failed_tests;
   struct test_case_status* next_case;
+  unsigned int failed_tests;
+  unsigned int default_padding;
 };
 
 struct test_suite_status
@@ -255,6 +256,7 @@ struct test_suite_status
   unsigned int test_case_count;
   unsigned int failed_test_case_count;
   unsigned int failed_test_count;
+  unsigned int default_padding;
 };
 
 /*************************/
@@ -325,7 +327,8 @@ struct test_suite_status
 
 #define TEST_SUITE_BEGIN(name) \
 int main(int argc, char** argv) { \
-  struct test_suite_status test_suite = (struct test_suite_status) { name, NULL, 0, 0, 0 }; \
+  if (argc > 1 && CMPLE_STRCMP(argv[1], "--skip")) return 0; \
+  struct test_suite_status test_suite = (struct test_suite_status) { name, NULL, 0, 0, 0, 0 }; \
   struct test_case_status* current_case = NULL; \
   ON_TEST_SUITE_BEGIN;
 
@@ -357,7 +360,7 @@ fprintf(stdout, "[%s]<%s> Starting test case...\n", test_suite.name, current_cas
 
 #define TEST_CASE_BEGIN(name) \
 TEST_VAR_CASE_COUNT++; \
-struct test_case_status TEST_NEW_CASE_VARNAME = (struct test_case_status) { name, 0, NULL }; \
+struct test_case_status TEST_NEW_CASE_VARNAME = (struct test_case_status) { name, NULL, 0, 0 }; \
 if (current_case == NULL) test_suite.first_case = & TEST_NEW_CASE_VARNAME ; \
 else current_case->next_case = & TEST_NEW_CASE_VARNAME ; \
 current_case = & TEST_NEW_CASE_VARNAME ; \
