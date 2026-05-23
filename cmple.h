@@ -327,6 +327,7 @@ struct test_suite_status
 
 #define TEST_SUITE_BEGIN(name) \
 int main(int argc, char** argv) { \
+  if (argc > 1 && CMPLE_STRCMP(argv[1], "--skip")) return 0; \
   struct test_suite_status test_suite = (struct test_suite_status) { name, NULL, 0, 0, 0, 0 }; \
   struct test_case_status* current_case = NULL; \
   ON_TEST_SUITE_BEGIN;

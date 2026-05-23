@@ -14,7 +14,7 @@ extern unsigned char matrix_errno;
  * so two consecutive calls of `pop_matrix_last_errno` would not return
  * the same value!
  */
-unsigned char pop_matrix_last_errno();
+unsigned char pop_matrix_last_errno(void);
 
 /**
  * 2x2 float matrix struct such that
@@ -78,13 +78,13 @@ struct matrix matrix_inverse(const struct matrix mat);
  * Identity matrix I_2
  * @return I_2
  */
-struct matrix matrix_id();
+struct matrix matrix_id(void);
 
 /**
  * Zero matrix (0)
  * @return (0)
  */
-struct matrix matrix_zero();
+struct matrix matrix_zero(void);
 
 #ifdef __cplusplus
 }
