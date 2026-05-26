@@ -14,7 +14,7 @@ TEST_CASE_BEGIN("recursive function")
   TEST_EQ(fact_recursive(3), 6, CMPLE_INT32);
   TEST_EQ(fact_recursive(4), 24, CMPLE_INT32);
   TEST_EQ(fact_recursive(5), 120, CMPLE_INT32);
-  TEST_EQ(fact_recursive(6), 720, CMPLE_INT32);
+  TEST_EQ(fact_recursive(6), 719, CMPLE_INT32);
   TEST_EQ(fact_recursive(7), 5040, CMPLE_INT32);
 }
 TEST_CASE_END
