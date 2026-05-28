@@ -256,7 +256,7 @@ struct test_suite_status
   unsigned int test_case_count;
   unsigned int failed_test_case_count;
   unsigned int failed_test_count;
-  unsigned int default_padding;
+  unsigned int last_fail_line;
 };
 
 /*************************/
@@ -301,6 +301,14 @@ struct test_suite_status
  * @note This only takes account of tests that have run before the call of this constant.
  */
 #define TEST_VAR_TOTAL_FAILURE_COUNT (test_suite.failed_test_count)
+
+/**
+ * Line of the last fail encountered in this test suite
+ * @param type unsigned int
+ * @param scope inside test suite, inside and/or outside any test case
+ * @note When no failure was encountered in this test suite, this variable is set to 0
+ */
+#define TEST_VAR_LAST_FAIL_LINE (test_suite.last_fail_line)
 
 /**
  * Name of the current test case
@@ -390,6 +398,7 @@ ON_TEST_CASE_END;
 if (!(expr)) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_EXPR_FAILURE(expr); \
 }
@@ -407,6 +416,7 @@ const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if (!( PASTE(test_eq_var_a_,__LINE__) == PASTE(test_eq_var_b_,__LINE__) )) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_EQ_FAILURE(a,b,t); \
 }
@@ -424,6 +434,7 @@ const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) == PASTE(test_eq_var_b_,__LINE__) ) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_NE_FAILURE(a,b,t); \
 }
@@ -441,6 +452,7 @@ const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) > PASTE(test_eq_var_b_,__LINE__) ) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_LE_FAILURE(a,b,t); \
 }
@@ -458,6 +470,7 @@ const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) >= PASTE(test_eq_var_b_,__LINE__) ) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_LT_FAILURE(a,b,t); \
 }
@@ -475,6 +488,7 @@ const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) < PASTE(test_eq_var_b_,__LINE__) ) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_GE_FAILURE(a,b,t); \
 }
@@ -492,6 +506,7 @@ const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) <= PASTE(test_eq_var_b_,__LINE__) ) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_GT_FAILURE(a,b,t); \
 }
@@ -507,6 +522,7 @@ if ( PASTE(test_eq_var_a_,__LINE__) <= PASTE(test_eq_var_b_,__LINE__) ) \
 if (CMPLE_STRLEN(x) != CMPLE_STRLEN(y) || CMPLE_STRCMP((x), (y))) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_STR_EQ_FAILURE(x,y); \
 }
@@ -522,6 +538,7 @@ if (CMPLE_STRLEN(x) != CMPLE_STRLEN(y) || CMPLE_STRCMP((x), (y))) \
 if (CMPLE_STRLEN(x) == CMPLE_STRLEN(y) && !CMPLE_STRCMP((x), (y))) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_STR_NE_FAILURE(x,y); \
 }
@@ -537,6 +554,7 @@ if (CMPLE_STRLEN(x) == CMPLE_STRLEN(y) && !CMPLE_STRCMP((x), (y))) \
 if (CMPLE_STRCMP((x),(y)) > 0) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_STR_LE_FAILURE(x,y); \
 }
@@ -552,6 +570,7 @@ if (CMPLE_STRCMP((x),(y)) > 0) \
 if (CMPLE_STRCMP((x),(y)) >= 0) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_STR_LT_FAILURE(x,y); \
 }
@@ -567,6 +586,7 @@ if (CMPLE_STRCMP((x),(y)) >= 0) \
 if (CMPLE_STRCMP((x),(y)) < 0) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_STR_GE_FAILURE(x,y); \
 }
@@ -582,6 +602,7 @@ if (CMPLE_STRCMP((x),(y)) < 0) \
 if (CMPLE_STRCMP((x),(y)) <= 0) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_STR_GT_FAILURE(x,y); \
 }
@@ -596,6 +617,7 @@ if (CMPLE_STRCMP((x),(y)) <= 0) \
 if (CMPLE_MEMCMP((x), (y), n)) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_ARRAY_EQ_FAILURE(x,y,n); \
 }
@@ -610,6 +632,7 @@ if (CMPLE_MEMCMP((x), (y), n)) \
 if (!CMPLE_MEMCMP((x), (y), n)) \
 { \
   current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
   ON_TEST_FAILURE_FILE_LINE; \
   ON_TEST_ARRAY_NE_FAILURE(x,y,n); \
 }
