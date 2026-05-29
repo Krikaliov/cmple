@@ -53,7 +53,7 @@ jobs:
       run: |
         ./build/test_matrix
         ./build/test_fact
-        ./build/test_array
+        ./build/test_arrays
     
     - name: Configure CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
