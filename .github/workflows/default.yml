@@ -42,29 +42,22 @@ jobs:
       working-directory: ${{ steps.strings.outputs.tests }}maths
       run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
     
-    - name: Running CMake for testing maths
+    - name: Build testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
-      run: cmake --build build --config release
+      run: cmake --build build --config Release
     
     - name: Running testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
-      shell: bash
-      run: |
-        ./build/test_matrix
-        ./build/test_fact
-        ./build/test_arrays
+      run: ctest --test-dir build -C Release --output-on-failure
     
     - name: Configure CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
       run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
     
-    - name: Running CMake for testing strings
+    - name: Build testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
-      run: cmake --build build --config release
+      run: cmake --build build --config Release
     
     - name: Running testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
-      shell: bash
-      run: |
-        ./build/test_date
-        ./build/test_string
+      run: ctest --test-dir build -C Release --output-on-failure
