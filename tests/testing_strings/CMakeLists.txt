@@ -24,11 +24,4 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
   string(REPLACE ".test" "" TEST_NAME ${TEST_NAME})
   add_executable(test_${TEST_NAME} ${TEST_SOURCE} ${CORE_SOURCES})
   target_include_directories(test_${TEST_NAME} PRIVATE src/ ../../)
-  list(APPEND ALL_TEST_TARGETS test_${TEST_NAME})
-endforeach()
-
-add_custom_target(run_tests COMMAND ${CMAKE_COMMAND} DEPENDS ${ALL_TEST_TARGETS})
-
-foreach(TEST_TARGET ${ALL_TEST_TARGETS})
-  add_custom_command(TARGET run_tests POST_BUILD COMMAND ${TEST_TARGET})
 endforeach()

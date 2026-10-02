@@ -5,13 +5,9 @@ on:
     branches: [ "dev" ]
   pull_request:
     branches: [ "main", "dev" ]
-  schedule:
-    - cron: '30 5 * * 1-5'
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -31,6 +27,8 @@ jobs:
           - os: ubuntu-latest
             c_compiler: cl
     
+    runs-on: ${{ matrix.os }}
+    
     steps:
     - uses: actions/checkout@v4
     
@@ -42,11 +40,11 @@ jobs:
     
     - name: Configure CMake for testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
-      run: cmake -B build -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+      run: rm -R build | cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
     
     - name: Running CMake for testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
-      run: cmake --build build
+      run: cmake --build build --config release
     
     - name: Running testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
@@ -57,11 +55,11 @@ jobs:
     
     - name: Configure CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
-      run: cmake -B build -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+      run: rm -R build | cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
     
     - name: Running CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
-      run: cmake --build build
+      run: cmake --build build --config release
     
     - name: Running testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
