@@ -40,7 +40,7 @@ jobs:
     
     - name: Configure CMake for testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
-      run: rm -R build | cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
     
     - name: Running CMake for testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
@@ -55,7 +55,7 @@ jobs:
     
     - name: Configure CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
-      run: rm -R build | cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
     
     - name: Running CMake for testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
