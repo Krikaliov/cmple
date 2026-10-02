@@ -9,26 +9,27 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall")
 
 # Code source
 
-file(GLOB_RECURSE CORE_SOURCES "src/*.c")
+file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 
 # Building library
 
 add_library(${PROJECT_NAME} STATIC ${CORE_SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE src)
+target_include_directories(${PROJECT_NAME} PUBLIC src)
 
 # Executable tests
 
-file(GLOB TEST_SOURCES "tests/*.test.c" "tests/**/*.test.c")
-foreach(TEST_SOURCE ${TEST_SOURCES})
-  get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
-  string(REPLACE ".test" "" TEST_NAME ${TEST_NAME})
-  add_executable(test_${TEST_NAME} ${TEST_SOURCE} ${CORE_SOURCES})
-  target_include_directories(test_${TEST_NAME} PRIVATE src/ ../../)
-  list(APPEND ALL_TEST_TARGETS test_${TEST_NAME})
-endforeach()
+enable_testing()
+file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.test.c")
+foreach(TEST_SRC ${TEST_SOURCES})
+    get_filename_component(FILE_NAME ${TEST_SRC} NAME)
+    
+    string(REGEX REPLACE "\\.test\\.c$" "" TEST_NAME ${FILE_NAME})
+    set(TARGET_NAME "test_${TEST_NAME}")
 
-add_custom_target(run_tests COMMAND ${CMAKE_COMMAND} DEPENDS ${ALL_TEST_TARGETS})
+    add_executable(${TARGET_NAME} ${TEST_SRC})
 
-foreach(TEST_TARGET ${ALL_TEST_TARGETS})
-  add_custom_command(TARGET run_tests POST_BUILD COMMAND ${TEST_TARGET})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_NAME})
+    target_include_directories(${TARGET_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    target_include_directories(${TARGET_NAME} PRIVATE "../../")
+    add_test(NAME ${TARGET_NAME} COMMAND ${TARGET_NAME})
 endforeach()
