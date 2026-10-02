@@ -389,6 +389,11 @@ ON_TEST_CASE_END;
   fprintf(stdout, "[%s]<%s> FAIL! %s:%d\n", test_suite.name, current_case->name, __FILE__, __LINE__)
 #endif
 
+#define _ON_TEST_FAILURE \
+  current_case->failed_tests++; \
+  test_suite.last_fail_line = __LINE__; \
+  ON_TEST_FAILURE_FILE_LINE;
+
 #ifndef ON_TEST_EXPR_FAILURE
 #define ON_TEST_EXPR_FAILURE(expr) \
   fprintf(stdout, "[%s]<%s> Expression " # expr " is falsy!\n\n", test_suite.name, current_case->name)
@@ -396,12 +401,7 @@ ON_TEST_CASE_END;
 
 #define TEST_EXPR(expr) \
 if (!(expr)) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_EXPR_FAILURE(expr); \
-}
+{ _ON_TEST_FAILURE ON_TEST_EXPR_FAILURE(expr); }
 
 #ifndef ON_TEST_EQ_FAILURE
 #define ON_TEST_EQ_FAILURE(a,b,t) \
@@ -414,12 +414,7 @@ if (!(expr)) \
 const CMPLE_T(t) PASTE(test_eq_var_a_,__LINE__) = a ; \
 const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if (!( PASTE(test_eq_var_a_,__LINE__) == PASTE(test_eq_var_b_,__LINE__) )) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_EQ_FAILURE(a,b,t); \
-}
+{ _ON_TEST_FAILURE ON_TEST_EQ_FAILURE(a,b,t); }
 
 #ifndef ON_TEST_NE_FAILURE
 #define ON_TEST_NE_FAILURE(a,b,t) \
@@ -432,12 +427,7 @@ if (!( PASTE(test_eq_var_a_,__LINE__) == PASTE(test_eq_var_b_,__LINE__) )) \
 const CMPLE_T(t) PASTE(test_eq_var_a_,__LINE__) = a ; \
 const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) == PASTE(test_eq_var_b_,__LINE__) ) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_NE_FAILURE(a,b,t); \
-}
+{ _ON_TEST_FAILURE ON_TEST_NE_FAILURE(a,b,t); }
 
 #ifndef ON_TEST_LE_FAILURE
 #define ON_TEST_LE_FAILURE(a,b,t) \
@@ -450,12 +440,7 @@ if ( PASTE(test_eq_var_a_,__LINE__) == PASTE(test_eq_var_b_,__LINE__) ) \
 const CMPLE_T(t) PASTE(test_eq_var_a_,__LINE__) = a ; \
 const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) > PASTE(test_eq_var_b_,__LINE__) ) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_LE_FAILURE(a,b,t); \
-}
+{ _ON_TEST_FAILURE ON_TEST_LE_FAILURE(a,b,t); }
 
 #ifndef ON_TEST_LT_FAILURE
 #define ON_TEST_LT_FAILURE(a,b,t) \
@@ -468,12 +453,7 @@ if ( PASTE(test_eq_var_a_,__LINE__) > PASTE(test_eq_var_b_,__LINE__) ) \
 const CMPLE_T(t) PASTE(test_eq_var_a_,__LINE__) = a ; \
 const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) >= PASTE(test_eq_var_b_,__LINE__) ) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_LT_FAILURE(a,b,t); \
-}
+{ _ON_TEST_FAILURE ON_TEST_LT_FAILURE(a,b,t); }
 
 #ifndef ON_TEST_GE_FAILURE
 #define ON_TEST_GE_FAILURE(a,b,t) \
@@ -486,12 +466,7 @@ if ( PASTE(test_eq_var_a_,__LINE__) >= PASTE(test_eq_var_b_,__LINE__) ) \
 const CMPLE_T(t) PASTE(test_eq_var_a_,__LINE__) = a ; \
 const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) < PASTE(test_eq_var_b_,__LINE__) ) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_GE_FAILURE(a,b,t); \
-}
+{ _ON_TEST_FAILURE ON_TEST_GE_FAILURE(a,b,t); }
 
 #ifndef ON_TEST_GT_FAILURE
 #define ON_TEST_GT_FAILURE(a,b,t) \
@@ -504,12 +479,7 @@ if ( PASTE(test_eq_var_a_,__LINE__) < PASTE(test_eq_var_b_,__LINE__) ) \
 const CMPLE_T(t) PASTE(test_eq_var_a_,__LINE__) = a ; \
 const CMPLE_T(t) PASTE(test_eq_var_b_,__LINE__) = b ; \
 if ( PASTE(test_eq_var_a_,__LINE__) <= PASTE(test_eq_var_b_,__LINE__) ) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_GT_FAILURE(a,b,t); \
-}
+{ _ON_TEST_FAILURE ON_TEST_GT_FAILURE(a,b,t); }
 
 #ifndef ON_TEST_STR_EQ_FAILURE
 #define ON_TEST_STR_EQ_FAILURE(x,y) \
@@ -520,12 +490,7 @@ if ( PASTE(test_eq_var_a_,__LINE__) <= PASTE(test_eq_var_b_,__LINE__) ) \
 
 #define TEST_STR_EQ(x,y) \
 if (CMPLE_STRLEN(x) != CMPLE_STRLEN(y) || CMPLE_STRCMP((x), (y))) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_STR_EQ_FAILURE(x,y); \
-}
+{ _ON_TEST_FAILURE ON_TEST_STR_EQ_FAILURE(x,y); }
 
 #ifndef ON_TEST_STR_NE_FAILURE
 #define ON_TEST_STR_NE_FAILURE(x,y) \
@@ -536,12 +501,7 @@ if (CMPLE_STRLEN(x) != CMPLE_STRLEN(y) || CMPLE_STRCMP((x), (y))) \
 
 #define TEST_STR_NE(x,y) \
 if (CMPLE_STRLEN(x) == CMPLE_STRLEN(y) && !CMPLE_STRCMP((x), (y))) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_STR_NE_FAILURE(x,y); \
-}
+{ _ON_TEST_FAILURE ON_TEST_STR_NE_FAILURE(x,y); }
 
 #ifndef ON_TEST_STR_LE_FAILURE
 #define ON_TEST_STR_LE_FAILURE(x,y) \
@@ -552,12 +512,7 @@ if (CMPLE_STRLEN(x) == CMPLE_STRLEN(y) && !CMPLE_STRCMP((x), (y))) \
 
 #define TEST_STR_LE(x,y) \
 if (CMPLE_STRCMP((x),(y)) > 0) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_STR_LE_FAILURE(x,y); \
-}
+{ _ON_TEST_FAILURE ON_TEST_STR_LE_FAILURE(x,y); }
 
 #ifndef ON_TEST_STR_LT_FAILURE
 #define ON_TEST_STR_LT_FAILURE(x,y) \
@@ -568,12 +523,7 @@ if (CMPLE_STRCMP((x),(y)) > 0) \
 
 #define TEST_STR_LT(x,y) \
 if (CMPLE_STRCMP((x),(y)) >= 0) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_STR_LT_FAILURE(x,y); \
-}
+{ _ON_TEST_FAILURE ON_TEST_STR_LT_FAILURE(x,y); }
 
 #ifndef ON_TEST_STR_GE_FAILURE
 #define ON_TEST_STR_GE_FAILURE(x,y) \
@@ -584,12 +534,7 @@ if (CMPLE_STRCMP((x),(y)) >= 0) \
 
 #define TEST_STR_GE(x,y) \
 if (CMPLE_STRCMP((x),(y)) < 0) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_STR_GE_FAILURE(x,y); \
-}
+{ _ON_TEST_FAILURE ON_TEST_STR_GE_FAILURE(x,y); }
 
 #ifndef ON_TEST_STR_GT_FAILURE
 #define ON_TEST_STR_GT_FAILURE(x,y) \
@@ -600,12 +545,7 @@ if (CMPLE_STRCMP((x),(y)) < 0) \
 
 #define TEST_STR_GT(x,y) \
 if (CMPLE_STRCMP((x),(y)) <= 0) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_STR_GT_FAILURE(x,y); \
-}
+{ _ON_TEST_FAILURE ON_TEST_STR_GT_FAILURE(x,y); }
 
 #ifndef ON_TEST_ARRAY_EQ_FAILURE
 #define ON_TEST_ARRAY_EQ_FAILURE(x,y,n) \
@@ -615,12 +555,7 @@ if (CMPLE_STRCMP((x),(y)) <= 0) \
 
 #define TEST_ARRAY_EQ(x,y,n) \
 if (CMPLE_MEMCMP((x), (y), n)) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_ARRAY_EQ_FAILURE(x,y,n); \
-}
+{ _ON_TEST_FAILURE ON_TEST_ARRAY_EQ_FAILURE(x,y,n); }
 
 #ifndef ON_TEST_ARRAY_NE_FAILURE
 #define ON_TEST_ARRAY_NE_FAILURE(x,y,n) \
@@ -630,16 +565,7 @@ if (CMPLE_MEMCMP((x), (y), n)) \
 
 #define TEST_ARRAY_NE(x,y,n) \
 if (!CMPLE_MEMCMP((x), (y), n)) \
-{ \
-  current_case->failed_tests++; \
-  test_suite.last_fail_line = __LINE__; \
-  ON_TEST_FAILURE_FILE_LINE; \
-  ON_TEST_ARRAY_NE_FAILURE(x,y,n); \
-}
-
-/*******/
-/* EOF */
-/*******/
+{ _ON_TEST_FAILURE ON_TEST_ARRAY_NE_FAILURE(x,y,n); }
 
 #ifdef __cplusplus
 }
