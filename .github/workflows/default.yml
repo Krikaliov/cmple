@@ -48,6 +48,7 @@ jobs:
     
     - name: Running testing maths
       working-directory: ${{ steps.strings.outputs.tests }}maths
+      shell: bash
       run: |
         ./build/test_matrix
         ./build/test_fact
@@ -63,6 +64,7 @@ jobs:
     
     - name: Running testing strings
       working-directory: ${{ steps.strings.outputs.tests }}strings
+      shell: bash
       run: |
         ./build/test_date
         ./build/test_string
